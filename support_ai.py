@@ -6,15 +6,16 @@ st.set_page_config(page_title="نظام الدعم الفني الذكي", page_
 st.title("🤖 نظام دعم فني بالذكاء الاصطناعي")
 st.write("برنامج بسيط وسهل يحدد نوع المشكلة وأولويتها باستخدام الذكاء الاصطناعي.")
 
-classifier = pipeline(
-    "zero-shot-classification",
-    model="joeddav/xlm-roberta-large-xnli"
-)
+@st.cache_resource
+def load_models():
+    classifier = pipeline("zero-shot-classification", 
+        model="joeddav/xlm-roberta-large-xnli")
+    sentiment = pipeline("sentiment-analysis",
+        model="CAMeL-Lab/bert-base-arabic-camelbert-da-sentiment")
+    return classifier, sentiment
 
-sentiment = pipeline(
-    "sentiment-analysis",
-    model="CAMeL-Lab/bert-base-arabic-camelbert-da-sentiment"
-)
+classifier, sentiment = load_models()
+
 
 categories = [
     "مشكلة شبكة",
